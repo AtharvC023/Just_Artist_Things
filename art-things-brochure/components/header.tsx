@@ -29,7 +29,10 @@ export default function Header() {
       transition={{ duration: 0.5 }}
     >
       <nav className="max-w-7xl mx-auto px-6 py-4 md:py-6 flex items-center justify-between">
-        <div className="text-2xl font-serif font-bold tracking-tight text-foreground">Your Brand</div>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="Just Artist Things" className="h-8 w-8" />
+          <span className="text-2xl font-serif font-bold tracking-tight text-foreground">Just Artist Things</span>
+        </div>
 
         <div className="hidden md:flex items-center gap-12">
           {navItems.map((item) => (
