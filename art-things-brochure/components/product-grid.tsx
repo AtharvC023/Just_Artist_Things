@@ -113,11 +113,11 @@ export default function ProductGrid({
                 transition={{ duration: 0.3 }}
               >
                 <Card className="overflow-hidden bg-card border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col">
-                  <div className="relative overflow-hidden bg-secondary h-64">
+                  <div className="relative overflow-hidden bg-white aspect-[5/4]">
                     <img
                       src={product.image || "/placeholder.svg?height=256&width=400&query=product"}
                       alt={product.name}
-                      className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                     />
                   </div>
 
