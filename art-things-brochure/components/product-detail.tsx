@@ -3,10 +3,22 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { ShoppingCart, Mail } from "lucide-react"
+import { ShoppingCart, MessageCircle, Instagram } from "lucide-react"
+
+const WHATSAPP_NUMBER = "918830968893" // Replace with your WhatsApp number (with country code, no + or spaces)
+const INSTAGRAM_USERNAME = "justartistthings" // Replace with your Instagram username
 
 export default function ProductDetail({ product, onClose }) {
   if (!product) return null
+
+  const handleWhatsAppInquiry = () => {
+    const message = encodeURIComponent(`Hi! I'm interested in: ${product.name}\n\nCould you provide more details?`)
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank')
+  }
+
+  const handleInstagramInquiry = () => {
+    window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, '_blank')
+  }
 
   return (
     <AnimatePresence>
@@ -35,7 +47,6 @@ export default function ProductDetail({ product, onClose }) {
             <div className="space-y-4">
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">{product.category}</p>
-                <p className="text-3xl font-bold text-foreground">{product.price}</p>
               </div>
 
               <div>
@@ -45,17 +56,22 @@ export default function ProductDetail({ product, onClose }) {
             </div>
 
             <div className="space-y-3 pt-6 border-t border-border">
-              <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="lg">
-                <ShoppingCart className="mr-2 h-4 w-4" />
-                Add to Cart
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full border-foreground/20 text-foreground hover:bg-foreground/5 bg-transparent"
+              <Button 
+                onClick={handleWhatsAppInquiry}
+                className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white" 
                 size="lg"
               >
-                <Mail className="mr-2 h-4 w-4" />
-                Contact for Details
+                <MessageCircle className="mr-2 h-4 w-4" />
+                Inquire on WhatsApp
+              </Button>
+              <Button
+                onClick={handleInstagramInquiry}
+                variant="outline"
+                className="w-full border-[#E4405F] text-[#E4405F] hover:bg-[#E4405F] hover:text-white"
+                size="lg"
+              >
+                <Instagram className="mr-2 h-4 w-4" />
+                Inquire on Instagram
               </Button>
             </div>
           </motion.div>

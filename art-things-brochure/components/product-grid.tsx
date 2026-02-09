@@ -125,9 +125,6 @@ export default function ProductGrid({
                     <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">{product.category}</p>
                     <h3 className="text-lg font-serif font-bold mb-2 text-foreground">{product.name}</h3>
                     <p className="text-foreground/70 text-sm mb-4 flex-grow">{product.description}</p>
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="text-2xl font-bold text-foreground">{product.price}</span>
-                    </div>
                     <Button
                       onClick={() => onProductSelect(product)}
                       className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"

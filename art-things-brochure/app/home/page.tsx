@@ -7,19 +7,105 @@ import ProductGrid from "@/components/product-grid"
 import ProductDetail from "@/components/product-detail"
 
 const PRODUCTS = [
-  // Add your products here
-  // Example structure:
-  // {
-  //   id: 1,
-  //   name: "Product Name",
-  //   category: "Category",
-  //   price: "$Price",
-  //   image: "/your-image.jpg",
-  //   description: "Product description",
-  // },
+  {
+    id: 1,
+    name: "Custom Portrait Frame",
+    category: "Frames",
+    price: "$49.99",
+    image: "/Custom Portrait Frame.jpeg",
+    description: "Beautiful custom portrait frame for your cherished memories",
+  },
+  {
+    id: 2,
+    name: "Custom Portrait Frame (Premium)",
+    category: "Frames",
+    price: "$59.99",
+    image: "/Custom Portrait Frame (2).jpeg",
+    description: "Premium custom portrait frame with elegant design",
+  },
+  {
+    id: 3,
+    name: "Golden Diya Decor",
+    category: "Decor",
+    price: "$29.99",
+    image: "/Golden Diya Decor.jpeg",
+    description: "Elegant golden diya for festive decoration",
+  },
+  {
+    id: 4,
+    name: "Festive Resin Diya",
+    category: "Decor",
+    price: "$24.99",
+    image: "/Festive Resin Diya.png",
+    description: "Handcrafted festive resin diya",
+  },
+  {
+    id: 5,
+    name: "Floral & Gold Heart Charm",
+    category: "Accessories",
+    price: "$19.99",
+    image: "/Floral & Gold Heart Charm.png",
+    description: "Delicate floral and gold heart charm",
+  },
+  {
+    id: 6,
+    name: "Personalized Name Keychain",
+    category: "Accessories",
+    price: "$14.99",
+    image: "/Personalized Name Keychain.png",
+    description: "Custom name keychain with elegant design",
+  },
+  {
+    id: 7,
+    name: "Personalized Name Keychain (Style 2)",
+    category: "Accessories",
+    price: "$14.99",
+    image: "/Personalized Name Keychain (2).png",
+    description: "Personalized keychain with unique style",
+  },
+  {
+    id: 8,
+    name: "Personalized Name Keychain (Style 3)",
+    category: "Accessories",
+    price: "$14.99",
+    image: "/Personalized Name Keychain (3).png",
+    description: "Custom name keychain with modern design",
+  },
+  {
+    id: 9,
+    name: "Personalized Name Keychain (Style 4)",
+    category: "Accessories",
+    price: "$14.99",
+    image: "/Personalized Name Keychain (4).png",
+    description: "Elegant personalized name keychain",
+  },
+  {
+    id: 10,
+    name: "Personalized Name Keychain (Style 5)",
+    category: "Accessories",
+    price: "$14.99",
+    image: "/Personalized Name Keychain (5).png",
+    description: "Stylish custom name keychain",
+  },
+  {
+    id: 11,
+    name: "Multi-Charm Name Set",
+    category: "Accessories",
+    price: "$34.99",
+    image: "/Multi-Charm Name Set.png",
+    description: "Beautiful multi-charm personalized name set",
+  },
+  {
+    id: 12,
+    name: "Multi-Charm Name Set (Deluxe)",
+    category: "Accessories",
+    price: "$39.99",
+    image: "/Multi-Charm Name Set (2).png",
+    description: "Deluxe multi-charm name set with premium finish",
+  },
 ]
 
-const CATEGORIES = ["All"] // Add your categories here
+const CATEGORIES = ["All", "Frames", "Decor", "Accessories"]
 
 export default function Home() {
   const [selectedProduct, setSelectedProduct] = useState(null)
