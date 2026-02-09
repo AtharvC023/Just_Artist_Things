@@ -44,7 +44,7 @@ export default function Hero() {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="relative h-96 md:h-full min-h-96"
+          className="relative aspect-[5/4] w-full"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-primary/5 rounded-3xl"></div>
           <motion.div
@@ -52,7 +52,7 @@ export default function Hero() {
             transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
             className="absolute inset-6 bg-card rounded-2xl shadow-lg flex items-center justify-center overflow-hidden border border-border"
           >
-            <img src="/placeholder.svg" alt="Product showcase" className="w-full h-full object-cover" />
+            <img src="/1000405724.jpg" alt="Product showcase" className="w-full h-full object-cover" />
           </motion.div>
         </motion.div>
       </div>
