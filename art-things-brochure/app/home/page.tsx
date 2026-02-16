@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react"
 import Header from "@/components/header"
 import Hero from "@/components/hero"
+import ProductCarousel from "@/components/product-carousel"
 import ProductGrid from "@/components/product-grid"
 import ProductDetail from "@/components/product-detail"
 
@@ -117,6 +118,7 @@ export default function Home() {
     <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 dark:from-slate-900 dark:via-cyan-950/30 dark:to-slate-800">
       <Header />
       <Hero />
+      <ProductCarousel products={PRODUCTS} />
       <ProductGrid
         products={filteredProducts}
         categories={CATEGORIES}
