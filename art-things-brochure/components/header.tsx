@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Menu, X, Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,14 +23,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark')
-    } else {
-      document.documentElement.classList.remove('dark')
-    }
-  }, [isDark])
 
   const navItems = ["Home", "About", "Contact"]
 
@@ -59,10 +57,10 @@ export default function Header() {
           <Button 
             variant="ghost" 
             size="icon" 
-            onClick={() => setIsDark(!isDark)}
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="text-foreground"
           >
-            {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            {mounted && (theme === "dark" ? <Sun size={20} /> : <Moon size={20} />)}
           </Button>
 
           <button className="md:hidden text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
