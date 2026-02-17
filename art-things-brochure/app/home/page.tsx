@@ -123,13 +123,6 @@ const PRODUCTS = [
   },
   {
     id: 17,
-    name: "Rustic Wooden Photo Frame",
-    category: "Frames",
-    image: "/Custom Frame.jpeg",
-    description: "Charming rustic frame with natural wood texture",
-  },
-  {
-    id: 18,
     name: "Designer Memory Frame",
     category: "Frames",
     image: "/Custom Portrait Frame (3).jpeg",
