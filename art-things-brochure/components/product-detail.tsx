@@ -6,8 +6,8 @@ import { Card } from "@/components/ui/card"
 import { MessageCircle, Instagram, X } from "lucide-react"
 import { useEffect } from "react"
 
-const WHATSAPP_NUMBER = "918830968893"
-const INSTAGRAM_USERNAME = "justartistthings"
+const WHATSAPP_NUMBER = "919370015472"
+const INSTAGRAM_URL = "https://www.instagram.com/just__artist.things?igsh=MTVoa3FiM2I0YXBhZQ=="
 
 export default function ProductDetail({ product, onClose, allProducts, onProductSelect }) {
   if (!product) return null
@@ -29,7 +29,7 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
   }
 
   const handleInstagramInquiry = () => {
-    window.open(`https://ig.me/m/${INSTAGRAM_USERNAME}`, '_blank')
+    window.open(INSTAGRAM_URL, '_blank')
   }
 
   return (
