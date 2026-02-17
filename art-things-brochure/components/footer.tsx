@@ -45,7 +45,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2 text-slate-300 dark:text-slate-400">
                 <MapPin className="h-4 w-4 text-primary" />
-                <span>123 Art Street, Creative City</span>
+                <span>Boisar, Palghar, Maharashtra</span>
               </li>
             </ul>
           </div>
