@@ -18,13 +18,6 @@ interface Product {
 
 const PRODUCTS: Product[] = [
   {
-    id: 1,
-    name: "Classic Wooden Portrait Frame",
-    category: "Frames",
-    image: "/Custom Portrait Frame.jpeg",
-    description: "Timeless wooden frame perfect for cherished family portraits",
-  },
-  {
     id: 2,
     name: "Elegant Gold-Trimmed Frame",
     category: "Frames",
@@ -110,17 +103,17 @@ const PRODUCTS: Product[] = [
   },
   {
     id: 14,
-    name: "Ocean Wave Resin Art",
+    name: "Birthday's Surprise",
     category: "Decor",
     image: "/Resin Art 1.png",
-    description: "Stunning ocean-inspired resin art piece",
+    description: "Stunning art piece perfect for Birthday celebrations",
   },
   {
     id: 15,
-    name: "Marble Effect Coaster Set",
+    name: "Valentine's Surprise",
     category: "Decor",
     image: "/Resin Art 2.png",
-    description: "Elegant marble-effect resin coasters for your home",
+    description: "Stunning art piece perfect for Valentine's Day decore",
   },
   {
     id: 16,
