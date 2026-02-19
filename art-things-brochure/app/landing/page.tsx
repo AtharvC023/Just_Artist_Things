@@ -47,9 +47,15 @@ export default function LandingPage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-2 border-teal-500 text-teal-600 hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-teal-950/20">
-              Learn More
-            </Button>
+            <Link href="#about">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="px-8 py-4 text-lg border-2 border-teal-500 text-teal-600 hover:bg-teal-50 dark:border-teal-400 dark:text-teal-400 dark:hover:bg-teal-950/20"
+              >
+                Learn More
+              </Button>
+            </Link>
           </motion.div>
 
           {/* Stats */}
