@@ -40,7 +40,8 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
 
   const handleWhatsAppInquiry = () => {
     const message = encodeURIComponent(`Hi! I'm interested in: ${product.name}\n\nCould you provide more details?`)
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank')
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${message}`
+    window.open(whatsappUrl, '_blank')
   }
 
   const handleInstagramInquiry = () => {
