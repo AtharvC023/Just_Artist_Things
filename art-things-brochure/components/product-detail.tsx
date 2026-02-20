@@ -73,7 +73,7 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
             <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           </button>
 
-          <div className="grid md:grid-cols-2 h-full">
+          <div className="grid md:grid-cols-2 h-full overflow-hidden">
             {/* Image Section */}
             <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center p-8">
               <img
@@ -84,7 +84,7 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
             </div>
 
             {/* Content Section */}
-            <div className="flex flex-col p-6 md:p-8 h-full">
+            <div className="flex flex-col p-6 md:p-8 h-full overflow-y-auto">
               {/* Product Info */}
               <div className="flex-shrink-0 mb-4">
                 <span className="inline-block px-3 py-1 bg-teal-100 dark:bg-teal-900/50 text-teal-700 dark:text-teal-300 text-xs font-semibold rounded-full uppercase tracking-wider mb-3">
@@ -99,7 +99,7 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
               </div>
 
               {/* Action Buttons */}
-              <div className="flex-shrink-0 space-y-2 mb-4">
+              <div className="flex-shrink-0 space-y-3 mb-6">
                 <Button 
                   onClick={handleWhatsAppInquiry}
                   className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all" 
