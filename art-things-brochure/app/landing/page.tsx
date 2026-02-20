@@ -93,7 +93,7 @@ export default function LandingPage() {
       </section>
 
       {/* About the Artist Section */}
-      <section className="py-20 px-6 bg-white dark:bg-slate-800">
+      <section id="about" className="py-20 px-6 bg-white dark:bg-slate-800">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -304,7 +304,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section id="about" className="py-20 px-6">
+      <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
