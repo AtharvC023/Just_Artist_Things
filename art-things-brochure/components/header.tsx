@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, LogIn, LogOut, User } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/contexts/AuthContext"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const { user, signInWithGoogle, signOut } = useAuth()
 
   useEffect(() => {
     setMounted(true)
@@ -68,6 +71,37 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-4">
+          {user ? (
+            <>
+              <div className="hidden md:flex items-center gap-3">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                  <AvatarFallback><User size={16} /></AvatarFallback>
+                </Avatar>
+                <span className="text-sm font-medium text-foreground">{user.displayName}</span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={signOut}
+                className="hidden md:flex items-center gap-2"
+              >
+                <LogOut size={16} />
+                Logout
+              </Button>
+            </>
+          ) : (
+            <Button 
+              variant="default" 
+              size="sm" 
+              onClick={signInWithGoogle}
+              className="hidden md:flex items-center gap-2"
+            >
+              <LogIn size={16} />
+              Sign in with Google
+            </Button>
+          )}
+
           <Button 
             variant="ghost" 
             size="icon" 
@@ -101,6 +135,36 @@ export default function Header() {
                 {item.name}
               </a>
             ))}
+            {user ? (
+              <>
+                <div className="flex items-center gap-3 py-2 border-t border-border">
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage src={user.photoURL || ''} alt={user.displayName || 'User'} />
+                    <AvatarFallback><User size={16} /></AvatarFallback>
+                  </Avatar>
+                  <span className="text-sm font-medium text-foreground">{user.displayName}</span>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={signOut}
+                  className="w-full"
+                >
+                  <LogOut size={16} className="mr-2" />
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <Button 
+                variant="default" 
+                size="sm" 
+                onClick={signInWithGoogle}
+                className="w-full"
+              >
+                <LogIn size={16} className="mr-2" />
+                Sign in with Google
+              </Button>
+            )}
           </div>
         </motion.div>
       )}
