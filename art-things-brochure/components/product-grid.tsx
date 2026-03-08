@@ -8,7 +8,7 @@ import { Search, Package } from "lucide-react"
 import { ProductCardSkeleton } from "@/components/loading-skeleton"
 
 interface Product {
-  id: number
+  id: string
   name: string
   category: string
   image: string

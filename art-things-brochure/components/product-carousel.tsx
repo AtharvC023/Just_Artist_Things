@@ -11,7 +11,7 @@ import {
 import Image from "next/image"
 
 interface Product {
-  id: number
+  id: string
   name: string
   category: string
   image: string

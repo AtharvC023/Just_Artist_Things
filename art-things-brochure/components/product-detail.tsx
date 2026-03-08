@@ -10,7 +10,7 @@ const WHATSAPP_NUMBER = "919370015472"
 const INSTAGRAM_URL = "https://www.instagram.com/just__artist.things?igsh=MTVoa3FiM2I0YXBhZQ=="
 
 interface Product {
-  id: number
+  id: string
   name: string
   category: string
   image: string
