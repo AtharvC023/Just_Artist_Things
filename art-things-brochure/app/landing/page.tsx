@@ -8,9 +8,9 @@ import Footer from "@/components/footer"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-blue-50 dark:from-slate-900 dark:via-cyan-950/30 dark:to-slate-800">
       {/* Hero Section */}
-      <section id="home" className="min-h-screen flex items-center justify-center px-6 py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800">
+      <section id="home" className="min-h-screen flex items-center justify-center px-6 py-20">
         <div className="max-w-6xl w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -46,7 +46,7 @@ export default function LandingPage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-6 bg-white dark:bg-slate-800">
+      <section id="about" className="py-20 px-6 bg-white/50 dark:bg-slate-800/50 backdrop-blur-sm">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -68,7 +68,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-6 bg-slate-50 dark:bg-slate-900">
+      <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <motion.div 
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
@@ -106,7 +106,7 @@ export default function LandingPage() {
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
                 }}
-                className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-sm text-center"
+                className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg shadow-sm text-center border border-teal-100 dark:border-teal-900"
               >
                 <div className="flex justify-center mb-4">{feature.icon}</div>
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-2">
@@ -122,7 +122,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section id="contact" className="py-20 px-6 bg-white dark:bg-slate-800">
+      <section id="contact" className="py-20 px-6 bg-gradient-to-r from-teal-100/30 via-cyan-100/30 to-blue-100/30 dark:from-teal-950/20 dark:via-cyan-950/20 dark:to-blue-950/20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
