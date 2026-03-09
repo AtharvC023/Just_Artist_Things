@@ -22,6 +22,7 @@ export default function AdminPage() {
     category: '',
     image: '',
     description: '',
+    featured: false,
   })
 
   const isAdmin = user?.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL
@@ -58,7 +59,7 @@ export default function AdminPage() {
       } else {
         await productService.addProduct(formData)
       }
-      setFormData({ name: '', category: '', image: '', description: '' })
+      setFormData({ name: '', category: '', image: '', description: '', featured: false })
       setShowForm(false)
       setEditingProduct(null)
       loadProducts()
@@ -75,6 +76,7 @@ export default function AdminPage() {
       category: product.category,
       image: product.image,
       description: product.description,
+      featured: product.featured || false,
     })
     setShowForm(true)
   }
@@ -104,7 +106,7 @@ export default function AdminPage() {
             <h1 className="text-4xl font-serif font-bold">Admin Panel</h1>
             <p className="text-foreground/60">Manage your products</p>
           </div>
-          <Button onClick={() => { setShowForm(true); setEditingProduct(null); setFormData({ name: '', category: '', image: '', description: '' }) }}>
+          <Button onClick={() => { setShowForm(true); setEditingProduct(null); setFormData({ name: '', category: '', image: '', description: '', featured: false }) }}>
             <Plus size={20} className="mr-2" />
             Add Product
           </Button>
@@ -149,6 +151,18 @@ export default function AdminPage() {
                   required
                 />
               </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="featured"
+                  checked={formData.featured}
+                  onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                  className="w-4 h-4"
+                />
+                <label htmlFor="featured" className="text-sm font-medium cursor-pointer">
+                  Featured in Carousel
+                </label>
+              </div>
               <div className="flex gap-4">
                 <Button type="submit">{editingProduct ? 'Update' : 'Add'} Product</Button>
                 <Button type="button" variant="outline" onClick={() => { setShowForm(false); setEditingProduct(null) }}>
@@ -169,7 +183,14 @@ export default function AdminPage() {
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-4">
-                  <p className="text-xs text-muted-foreground uppercase mb-1">{product.category}</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs text-muted-foreground uppercase">{product.category}</p>
+                    {product.featured && (
+                      <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
+                        ⭐ Featured
+                      </span>
+                    )}
+                  </div>
                   <h3 className="font-semibold mb-2">{product.name}</h3>
                   <p className="text-sm text-foreground/70 mb-4">{product.description}</p>
                   <div className="flex gap-2">
