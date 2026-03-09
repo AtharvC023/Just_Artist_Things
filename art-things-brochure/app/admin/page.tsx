@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card } from "@/components/ui/card"
-import { Plus, Edit, Trash2, ArrowLeft } from "lucide-react"
+import { Plus, Edit, Trash2, ArrowLeft, Star } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 export default function AdminPage() {
@@ -89,6 +89,16 @@ export default function AdminPage() {
     } catch (error) {
       console.error('Error deleting product:', error)
       alert('Error deleting product')
+    }
+  }
+
+  const toggleFeatured = async (product: Product) => {
+    try {
+      await productService.updateProduct(product.id, { featured: !product.featured })
+      loadProducts()
+    } catch (error) {
+      console.error('Error updating featured status:', error)
+      alert('Error updating featured status')
     }
   }
 
@@ -179,8 +189,18 @@ export default function AdminPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
               <Card key={product.id} className="overflow-hidden">
-                <div className="aspect-[5/4] bg-white">
+                <div className="relative aspect-[5/4] bg-white">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                  <button
+                    onClick={() => toggleFeatured(product)}
+                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                    title={product.featured ? "Remove from carousel" : "Add to carousel"}
+                  >
+                    <Star 
+                      size={20} 
+                      className={product.featured ? "fill-yellow-500 text-yellow-500" : "text-gray-400"} 
+                    />
+                  </button>
                 </div>
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
