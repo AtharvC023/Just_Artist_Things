@@ -23,7 +23,8 @@ export default function Home() {
     const fetchProducts = async () => {
       try {
         const data = await productService.getAllProducts()
-        setProducts(data)
+        const sortedData = data.sort((a, b) => (a.order || 0) - (b.order || 0))
+        setProducts(sortedData)
       } catch (error) {
         console.error('Error fetching products:', error)
       } finally {

@@ -17,6 +17,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [draggedProduct, setDraggedProduct] = useState<Product | null>(null)
   const [formData, setFormData] = useState({
     name: '',
     category: '',
@@ -43,7 +44,8 @@ export default function AdminPage() {
   const loadProducts = async () => {
     try {
       const data = await productService.getAllProducts()
-      setProducts(data)
+      const sortedData = data.sort((a, b) => (a.order || 0) - (b.order || 0))
+      setProducts(sortedData)
     } catch (error) {
       console.error('Error loading products:', error)
     } finally {
@@ -105,6 +107,38 @@ export default function AdminPage() {
     }
   }
 
+  const handleDragStart = (product: Product) => {
+    setDraggedProduct(product)
+  }
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+  }
+
+  const handleDrop = async (targetProduct: Product) => {
+    if (!draggedProduct || draggedProduct.id === targetProduct.id) return
+
+    const draggedIndex = products.findIndex(p => p.id === draggedProduct.id)
+    const targetIndex = products.findIndex(p => p.id === targetProduct.id)
+
+    const newProducts = [...products]
+    newProducts.splice(draggedIndex, 1)
+    newProducts.splice(targetIndex, 0, draggedProduct)
+
+    setProducts(newProducts)
+
+    try {
+      for (let i = 0; i < newProducts.length; i++) {
+        await productService.updateProduct(newProducts[i].id, { order: i })
+      }
+    } catch (error) {
+      console.error('Error updating order:', error)
+      loadProducts()
+    }
+
+    setDraggedProduct(null)
+  }
+
   if (!user || !isAdmin) return null
 
   return (
@@ -117,7 +151,7 @@ export default function AdminPage() {
               Back to Home
             </Button>
             <h1 className="text-4xl font-serif font-bold">Admin Panel</h1>
-            <p className="text-foreground/60">Manage your products</p>
+            <p className="text-foreground/60">Manage your products • Drag cards to reorder</p>
           </div>
           <Button onClick={() => { setShowForm(true); setEditingProduct(null); setFormData({ name: '', category: '', image: '', description: '', featured: false }) }}>
             <Plus size={20} className="mr-2" />
@@ -191,7 +225,16 @@ export default function AdminPage() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product) => (
-              <Card key={product.id} className="overflow-hidden">
+              <Card 
+                key={product.id} 
+                className={`overflow-hidden cursor-move hover:shadow-xl transition-all ${
+                  draggedProduct?.id === product.id ? 'opacity-50 scale-95' : ''
+                }`}
+                draggable
+                onDragStart={() => handleDragStart(product)}
+                onDragOver={handleDragOver}
+                onDrop={() => handleDrop(product)}
+              >
                 <div className="relative aspect-[5/4] bg-white">
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                   <button

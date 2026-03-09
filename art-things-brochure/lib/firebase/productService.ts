@@ -8,6 +8,7 @@ export interface Product {
   image: string;
   description: string;
   featured?: boolean;
+  order?: number;
 }
 
 const PRODUCTS_COLLECTION = 'products';
