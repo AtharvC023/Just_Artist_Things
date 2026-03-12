@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Menu, X, Moon, Sun, LogIn, LogOut, User, Heart, ShoppingCart } from "lucide-react"
+import { Menu, X, Moon, Sun, LogIn, LogOut, User, Heart, ShoppingCart, Package } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -41,6 +41,12 @@ export default function Header() {
     { name: "Contact", href: "#contact" }
   ]
 
+  const userMenuItems = user ? [
+    { name: "My Orders", action: () => router.push('/orders'), icon: Package },
+    { name: "Favorites", action: () => router.push('/favorites'), icon: Heart },
+    { name: "Cart", action: () => router.push('/cart'), icon: ShoppingCart },
+  ] : []
+
   const isAdmin = user?.email && process.env.NEXT_PUBLIC_ADMIN_EMAIL?.split(',').map(e => e.trim()).includes(user.email)
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -78,6 +84,14 @@ export default function Header() {
               {item.name}
             </a>
           ))}
+          {user && (
+            <button
+              onClick={() => router.push('/orders')}
+              className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
+            >
+              My Orders
+            </button>
+          )}
           {isAdmin && (
             <button
               onClick={() => router.push('/admin')}
@@ -184,6 +198,22 @@ export default function Header() {
                 {item.name}
               </a>
             ))}
+            {user && (
+              <button
+                onClick={() => router.push('/orders')}
+                className="text-sm font-medium text-foreground cursor-pointer text-left"
+              >
+                My Orders
+              </button>
+            )}
+            {isAdmin && (
+              <button
+                onClick={() => router.push('/admin')}
+                className="text-sm font-medium text-foreground cursor-pointer text-left"
+              >
+                Admin
+              </button>
+            )}
             {user ? (
               <>
                 <div className="flex items-center gap-3 py-2 border-t border-border">

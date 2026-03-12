@@ -3,8 +3,11 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { MessageCircle, Instagram, X } from "lucide-react"
+import { MessageCircle, Instagram, X, ShoppingCart, Heart } from "lucide-react"
 import { useEffect } from "react"
+import { useCart } from "@/contexts/CartContext"
+import { useFavorites } from "@/contexts/FavoritesContext"
+import { useAuth } from "@/contexts/AuthContext"
 
 const WHATSAPP_NUMBER = "919370015472"
 const INSTAGRAM_URL = "https://www.instagram.com/just__artist.things?igsh=MTVoa3FiM2I0YXBhZQ=="
@@ -15,6 +18,7 @@ interface Product {
   category: string
   image: string
   description: string
+  price?: number
 }
 
 interface ProductDetailProps {
@@ -25,7 +29,37 @@ interface ProductDetailProps {
 }
 
 export default function ProductDetail({ product, onClose, allProducts, onProductSelect }: ProductDetailProps) {
+  const { addToCart } = useCart()
+  const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites()
+  const { user } = useAuth()
+
   if (!product) return null
+
+  const handleAddToCart = async () => {
+    if (!user) {
+      alert('Please sign in to add items to cart')
+      return
+    }
+    await addToCart(
+      product.id,
+      product.name,
+      product.image,
+      product.price || 0,
+      product.category
+    )
+  }
+
+  const handleFavoriteToggle = async () => {
+    if (!user) {
+      alert('Please sign in to add favorites')
+      return
+    }
+    if (isFavorite(product.id)) {
+      await removeFromFavorites(product.id)
+    } else {
+      await addToFavorites(product.id)
+    }
+  }
 
   const relatedProducts = allProducts
     ?.filter(p => p.category === product.category && p.id !== product.id)
@@ -100,6 +134,24 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
 
               {/* Action Buttons */}
               <div className="flex-shrink-0 space-y-3 mb-6">
+                {user && (
+                  <div className="flex gap-2 mb-3">
+                    <Button 
+                      onClick={handleAddToCart}
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all" 
+                    >
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                      Add to Cart
+                    </Button>
+                    <Button
+                      onClick={handleFavoriteToggle}
+                      variant="outline"
+                      className="h-12 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all"
+                    >
+                      <Heart className={`h-5 w-5 ${isFavorite(product.id) ? 'fill-red-500 text-red-500' : ''}`} />
+                    </Button>
+                  </div>
+                )}
                 <Button 
                   onClick={handleWhatsAppInquiry}
                   className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all" 
