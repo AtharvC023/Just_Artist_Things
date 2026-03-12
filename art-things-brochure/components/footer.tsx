@@ -1,13 +1,16 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from "lucide-react"
+import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, Send } from "lucide-react"
 import Link from "next/link"
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-slate-900 via-teal-900 to-slate-900 dark:from-slate-950 dark:via-teal-950 dark:to-slate-950 text-white">
+    <footer className="relative bg-gradient-to-br from-slate-900 via-teal-950 to-slate-900 dark:from-slate-950 dark:via-teal-950 dark:to-slate-950 text-white overflow-hidden">
+      {/* Decorative gradient */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-teal-500/50 to-transparent" />
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* About */}
@@ -57,14 +60,16 @@ export default function Footer() {
               Subscribe for exclusive offers and updates
             </p>
             <div className="flex gap-2">
-              <Input 
-                type="email" 
-                placeholder="Your email" 
-                className="bg-slate-800 dark:bg-slate-900 border-slate-700 dark:border-slate-800 text-white placeholder:text-slate-400"
+              <Input
+                type="email"
+                placeholder="Your email"
+                className="bg-white/10 backdrop-blur-md border-white/10 text-white placeholder:text-slate-400 rounded-lg focus:border-teal-400 transition-all"
               />
-              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                Subscribe
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button className="bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600 text-white rounded-lg shadow-lg shadow-teal-500/20 px-4">
+                  <Send className="h-4 w-4" />
+                </Button>
+              </motion.div>
             </div>
           </div>
         </div>
@@ -72,18 +77,24 @@ export default function Footer() {
         {/* Social Media & Copyright */}
         <div className="border-t border-slate-700 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-slate-400 dark:text-slate-500 text-sm">
-            © 2024 Just Artist Things. All rights reserved.
+            © 2025 Just Artist Things. All rights reserved.
           </p>
           <div className="flex gap-4">
-            <Link href="#" className="bg-slate-800 dark:bg-slate-900 p-2 rounded-full hover:bg-primary transition-colors">
-              <Facebook className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="bg-slate-800 dark:bg-slate-900 p-2 rounded-full hover:bg-primary transition-colors">
-              <Instagram className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="bg-slate-800 dark:bg-slate-900 p-2 rounded-full hover:bg-primary transition-colors">
-              <Twitter className="h-5 w-5" />
-            </Link>
+            <motion.div whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }}>
+              <Link href="#" className="bg-white/10 backdrop-blur-sm p-2.5 rounded-xl hover:bg-gradient-to-br hover:from-blue-500 hover:to-blue-600 transition-all duration-300 block shadow-lg shadow-black/10">
+                <Facebook className="h-5 w-5" />
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }}>
+              <Link href="https://www.instagram.com/just__artist.things" className="bg-white/10 backdrop-blur-sm p-2.5 rounded-xl hover:bg-gradient-to-br hover:from-pink-500 hover:to-purple-600 transition-all duration-300 block shadow-lg shadow-black/10">
+                <Instagram className="h-5 w-5" />
+              </Link>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1, y: -2 }} whileTap={{ scale: 0.9 }}>
+              <Link href="#" className="bg-white/10 backdrop-blur-sm p-2.5 rounded-xl hover:bg-gradient-to-br hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 block shadow-lg shadow-black/10">
+                <Twitter className="h-5 w-5" />
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -128,13 +128,13 @@ export default function ProductGrid({
           className="mb-12"
         >
           <div className="relative max-w-md">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground/40 h-5 w-5" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-foreground/40 h-5 w-5" />
             <Input
               type="text"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 py-6 text-foreground bg-white border-border"
+              className="pl-11 py-6 text-foreground bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-white/50 dark:border-slate-700/50 rounded-xl shadow-sm focus:shadow-md focus:border-teal-300 dark:focus:border-teal-700 transition-all"
             />
           </div>
         </motion.div>
@@ -148,17 +148,18 @@ export default function ProductGrid({
           className="mb-16 flex flex-wrap gap-3"
         >
           {categories.map((category) => (
-            <Button
-              key={category}
-              onClick={() => onCategoryChange(category)}
-              variant={selectedCategory === category ? "default" : "outline"}
-              className={`px-6 py-2 rounded-full transition-all ${selectedCategory === category
-                ? "bg-primary text-primary-foreground"
-                : "border-border text-foreground hover:border-foreground/50"
-                }`}
-            >
-              {category}
-            </Button>
+            <motion.div key={category} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                onClick={() => onCategoryChange(category)}
+                variant={selectedCategory === category ? "default" : "outline"}
+                className={`px-6 py-2 rounded-full transition-all duration-200 ${selectedCategory === category
+                  ? "bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-md shadow-teal-500/20 border-0"
+                  : "border-slate-200 dark:border-slate-700 text-foreground bg-white/60 dark:bg-slate-800/60 backdrop-blur-sm hover:border-teal-300 dark:hover:border-teal-700 hover:shadow-sm"
+                  }`}
+              >
+                {category}
+              </Button>
+            </motion.div>
           ))}
         </motion.div>
 
@@ -188,17 +189,19 @@ export default function ProductGrid({
                   whileHover={{ y: -8 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Card className="overflow-hidden bg-card border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col group">
-                    <div className="relative overflow-hidden bg-white aspect-[5/4]">
-                      <button
+                  <Card className="overflow-hidden bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-white/50 dark:border-slate-700/50 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col group rounded-2xl">
+                    <div className="relative overflow-hidden bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-700 dark:to-slate-800 aspect-[5/4]">
+                      <motion.button
+                        whileHover={{ scale: 1.15 }}
+                        whileTap={{ scale: 0.9 }}
                         onClick={(e) => handleFavoriteClick(e, product.id)}
-                        className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                        className="absolute top-3 right-3 z-10 p-2.5 rounded-full bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm hover:bg-white dark:hover:bg-slate-700 shadow-md transition-all"
                       >
                         <Heart
-                          size={20}
-                          className={isFavorite(product.id) ? "fill-red-500 text-red-500" : "text-gray-600"}
+                          size={18}
+                          className={`transition-colors ${isFavorite(product.id) ? "fill-red-500 text-red-500" : "text-gray-400 dark:text-gray-500"}`}
                         />
-                      </button>
+                      </motion.button>
                       {isGif ? (
                         <>
                           <Image
@@ -246,21 +249,25 @@ export default function ProductGrid({
                       </div>
 
                       <div className="flex gap-2">
-                        <Button
-                          onClick={(e) => handleAddToCart(e, product)}
-                          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground text-xs h-9"
-                          disabled={product.stock !== undefined && product.stock <= 0}
-                        >
-                          <ShoppingCart size={14} className="mr-1" />
-                          {product.stock !== undefined && product.stock <= 0 ? 'Out' : 'Add'}
-                        </Button>
-                        <Button
-                          onClick={() => onProductSelect(product)}
-                          variant="outline"
-                          className="flex-1 text-xs h-9"
-                        >
-                          Details
-                        </Button>
+                        <motion.div whileTap={{ scale: 0.95 }} className="flex-1">
+                          <Button
+                            onClick={(e) => handleAddToCart(e, product)}
+                            className="w-full bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-700 hover:to-cyan-700 text-white text-xs h-9 rounded-lg shadow-sm hover:shadow-md transition-all"
+                            disabled={product.stock !== undefined && product.stock <= 0}
+                          >
+                            <ShoppingCart size={14} className="mr-1" />
+                            {product.stock !== undefined && product.stock <= 0 ? 'Out' : 'Add'}
+                          </Button>
+                        </motion.div>
+                        <motion.div whileTap={{ scale: 0.95 }} className="flex-1">
+                          <Button
+                            onClick={() => onProductSelect(product)}
+                            variant="outline"
+                            className="w-full text-xs h-9 rounded-lg border-slate-200 dark:border-slate-700 hover:border-teal-300 dark:hover:border-teal-700 transition-all"
+                          >
+                            Details
+                          </Button>
+                        </motion.div>
                       </div>
                     </div>
                   </Card>
@@ -274,28 +281,33 @@ export default function ProductGrid({
             animate={{ opacity: 1, y: 0 }}
             className="text-center py-20"
           >
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
-                <Package className="w-10 h-10 text-muted-foreground" />
-              </div>
-              <h3 className="text-2xl font-semibold text-foreground">No products found</h3>
-              <p className="text-foreground/60 text-lg max-w-md">
+            <div className="flex flex-col items-center gap-5">
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                className="w-24 h-24 rounded-2xl bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center shadow-lg shadow-teal-500/10"
+              >
+                <Package className="w-12 h-12 text-teal-500" />
+              </motion.div>
+              <h3 className="text-2xl font-bold text-foreground">No products found</h3>
+              <p className="text-foreground/60 text-base max-w-md">
                 {searchQuery
                   ? `No results for "${searchQuery}". Try a different search term.`
                   : `No products in ${selectedCategory} category yet.`
                 }
               </p>
               {(searchQuery || selectedCategory !== "All") && (
-                <Button
-                  onClick={() => {
-                    onSearchChange("")
-                    onCategoryChange("All")
-                  }}
-                  variant="outline"
-                  className="mt-4"
-                >
-                  Clear Filters
-                </Button>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    onClick={() => {
+                      onSearchChange("")
+                      onCategoryChange("All")
+                    }}
+                    className="mt-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl px-6 shadow-md"
+                  >
+                    Show All Products
+                  </Button>
+                </motion.div>
               )}
             </div>
           </motion.div>
