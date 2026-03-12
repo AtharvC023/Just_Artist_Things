@@ -97,12 +97,27 @@ export default function Header() {
             </a>
           ))}
           {user && (
-            <button
-              onClick={() => router.push('/orders')}
-              className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
-            >
-              Orders
-            </button>
+            <>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => router.push('/favorites')}
+                className="relative p-2 h-auto text-sm font-medium text-foreground hover:text-foreground/60 transition-colors"
+              >
+                <Heart size={16} className={favorites.length > 0 ? "fill-red-500 text-red-500" : ""} />
+                {favorites.length > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-xs">
+                    {favorites.length}
+                  </Badge>
+                )}
+              </Button>
+              <button
+                onClick={() => router.push('/orders')}
+                className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
+              >
+                Orders
+              </button>
+            </>
           )}
           {isAdmin && (
             <button
@@ -116,34 +131,19 @@ export default function Header() {
 
         <div className="flex items-center gap-4">
           {user && (
-            <>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => router.push('/cart')}
-                className="relative"
-              >
-                <ShoppingCart size={20} />
-                {getItemCount() > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                    {getItemCount()}
-                  </Badge>
-                )}
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={() => router.push('/favorites')}
-                className="relative"
-              >
-                <Heart size={20} className={favorites.length > 0 ? "fill-red-500 text-red-500" : ""} />
-                {favorites.length > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
-                    {favorites.length}
-                  </Badge>
-                )}
-              </Button>
-            </>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={() => router.push('/cart')}
+              className="relative"
+            >
+              <ShoppingCart size={20} />
+              {getItemCount() > 0 && (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                  {getItemCount()}
+                </Badge>
+              )}
+            </Button>
           )}
 
           {user ? (
