@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Package, Heart, ShoppingCart } from "lucide-react"
+import Image from "next/image"
 import { ProductCardSkeleton } from "@/components/loading-skeleton"
 import { StockStatus } from "@/components/stock-status"
 import { useFavorites } from "@/contexts/FavoritesContext"
@@ -53,13 +54,13 @@ export default function ProductGrid({
       alert('Please sign in to add items to cart')
       return
     }
-    
+
     // Check if product is out of stock
     if (product.stock !== undefined && product.stock <= 0) {
       alert('This item is out of stock')
       return
     }
-    
+
     await addToCart(
       product.id,
       product.name,
@@ -151,11 +152,10 @@ export default function ProductGrid({
               key={category}
               onClick={() => onCategoryChange(category)}
               variant={selectedCategory === category ? "default" : "outline"}
-              className={`px-6 py-2 rounded-full transition-all ${
-                selectedCategory === category
+              className={`px-6 py-2 rounded-full transition-all ${selectedCategory === category
                   ? "bg-primary text-primary-foreground"
                   : "border-border text-foreground hover:border-foreground/50"
-              }`}
+                }`}
             >
               {category}
             </Button>
@@ -180,88 +180,98 @@ export default function ProductGrid({
             {products.map((product) => {
               const isGif = product.image?.endsWith('.gif')
               const staticImage = isGif ? product.image.replace('.gif', '.png') : product.image
-              
-              return (
-              <motion.div
-                key={product.id}
-                variants={itemVariants}
-                whileHover={{ y: -8 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card className="overflow-hidden bg-card border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col group">
-                  <div className="relative overflow-hidden bg-white aspect-[5/4]">
-                    <button
-                      onClick={(e) => handleFavoriteClick(e, product.id)}
-                      className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
-                    >
-                      <Heart 
-                        size={20} 
-                        className={isFavorite(product.id) ? "fill-red-500 text-red-500" : "text-gray-600"} 
-                      />
-                    </button>
-                    {isGif ? (
-                      <>
-                        <img
-                          src={staticImage}
-                          alt={product.name}
-                          className="w-full h-full object-cover group-hover:opacity-0 transition-opacity duration-300"
-                        />
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        />
-                      </>
-                    ) : (
-                      <img
-                        src={product.image || "/placeholder.svg?height=256&width=400&query=product"}
-                        alt={product.name}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                      />
-                    )}
-                  </div>
 
-                  <div className="p-6 flex flex-col flex-grow">
-                    <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">{product.category}</p>
-                    <h3 className="text-lg font-serif font-bold mb-2 text-foreground">{product.name}</h3>
-                    <p className="text-foreground/70 text-sm mb-4 flex-grow">{product.description}</p>
-                    
-                    {/* Price and Stock Info */}
-                    <div className="mb-4">
-                      {product.price && product.price > 0 && (
-                        <p className="text-xl font-bold text-primary mb-2">₹{product.price.toFixed(2)}</p>
-                      )}
-                      {product.stock !== undefined && (
-                        <StockStatus stock={product.stock} variant="detailed" className="mb-2" />
+              return (
+                <motion.div
+                  key={product.id}
+                  variants={itemVariants}
+                  whileHover={{ y: -8 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="overflow-hidden bg-card border-0 shadow-sm hover:shadow-lg transition-shadow duration-300 h-full flex flex-col group">
+                    <div className="relative overflow-hidden bg-white aspect-[5/4]">
+                      <button
+                        onClick={(e) => handleFavoriteClick(e, product.id)}
+                        className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                      >
+                        <Heart
+                          size={20}
+                          className={isFavorite(product.id) ? "fill-red-500 text-red-500" : "text-gray-600"}
+                        />
+                      </button>
+                      {isGif ? (
+                        <>
+                          <Image
+                            src={staticImage}
+                            alt={product.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:opacity-0 transition-opacity duration-300"
+                            priority={products.indexOf(product) < 3}
+                          />
+                          <Image
+                            src={product.image}
+                            alt={product.name}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            unoptimized={true} // Keep GIFs unoptimized or handled separately
+                          />
+                        </>
+                      ) : (
+                        <Image
+                          src={product.image || "/placeholder.svg?height=256&width=400&query=product"}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover hover:scale-105 transition-transform duration-500"
+                          priority={products.indexOf(product) < 6}
+                        />
                       )}
                     </div>
-                    
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={(e) => handleAddToCart(e, product)}
-                        className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-                        disabled={product.stock !== undefined && product.stock <= 0}
-                      >
-                        <ShoppingCart size={16} className="mr-2" />
-                        {product.stock !== undefined && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
-                      </Button>
-                      <Button
-                        onClick={() => onProductSelect(product)}
-                        variant="outline"
-                        className="flex-1"
-                      >
-                        Details
-                      </Button>
+
+                    <div className="p-6 flex flex-col flex-grow">
+                      <p className="text-xs text-muted-foreground uppercase tracking-widest mb-2">{product.category}</p>
+                      <h3 className="text-lg font-serif font-bold mb-2 text-foreground">{product.name}</h3>
+                      <p className="text-foreground/70 text-sm mb-4 flex-grow">{product.description}</p>
+
+                      {/* Price and Stock Info */}
+                      <div className="mb-4">
+                        {product.price && product.price > 0 && (
+                          <p className="text-xl font-bold text-primary mb-2">₹{product.price.toFixed(2)}</p>
+                        )}
+                        {product.stock !== undefined && (
+                          <StockStatus stock={product.stock} variant="detailed" className="mb-2" />
+                        )}
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={(e) => handleAddToCart(e, product)}
+                          className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+                          disabled={product.stock !== undefined && product.stock <= 0}
+                        >
+                          <ShoppingCart size={16} className="mr-2" />
+                          {product.stock !== undefined && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+                        </Button>
+                        <Button
+                          onClick={() => onProductSelect(product)}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          Details
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </motion.div>
-            )})}
+                  </Card>
+                </motion.div>
+              )
+            })}
           </motion.div>
         ) : (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }} 
-            animate={{ opacity: 1, y: 0 }} 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="text-center py-20"
           >
             <div className="flex flex-col items-center gap-4">
@@ -270,7 +280,7 @@ export default function ProductGrid({
               </div>
               <h3 className="text-2xl font-semibold text-foreground">No products found</h3>
               <p className="text-foreground/60 text-lg max-w-md">
-                {searchQuery 
+                {searchQuery
                   ? `No results for "${searchQuery}". Try a different search term.`
                   : `No products in ${selectedCategory} category yet.`
                 }

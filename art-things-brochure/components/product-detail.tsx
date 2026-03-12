@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { MessageCircle, Instagram, X, ShoppingCart, Heart } from "lucide-react"
+import Image from "next/image"
 import { useEffect } from "react"
 import { useCart } from "@/contexts/CartContext"
 import { useFavorites } from "@/contexts/FavoritesContext"
@@ -43,13 +44,13 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
       alert('Please sign in to add items to cart')
       return
     }
-    
+
     // Check if product is out of stock
     if (product.stock !== undefined && product.stock <= 0) {
       alert('This item is out of stock')
       return
     }
-    
+
     await addToCart(
       product.id,
       product.name,
@@ -120,10 +121,12 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
           <div className="grid md:grid-cols-2 h-full overflow-hidden">
             {/* Image Section */}
             <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center p-8">
-              <img
+              <Image
                 src={product.image}
                 alt={product.name}
-                className="w-full h-full object-contain"
+                fill
+                className="object-contain p-8"
+                priority
               />
             </div>
 
@@ -140,7 +143,7 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
                 <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-4">
                   {product.description}
                 </p>
-                
+
                 {/* Price and Stock */}
                 <div className="mb-4">
                   {product.price && product.price > 0 && (
@@ -156,10 +159,10 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
               <div className="flex-shrink-0 space-y-3 mb-6">
                 {user && (
                   <div className="flex gap-2 mb-3">
-                    <Button 
+                    <Button
                       onClick={handleAddToCart}
                       disabled={product.stock !== undefined && product.stock <= 0}
-                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ShoppingCart className="mr-2 h-4 w-4" />
                       {product.stock !== undefined && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
@@ -173,9 +176,9 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
                     </Button>
                   </div>
                 )}
-                <Button 
+                <Button
                   onClick={handleWhatsAppInquiry}
-                  className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all" 
+                  className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all"
                 >
                   <MessageCircle className="mr-2 h-4 w-4" />
                   Inquire on WhatsApp
@@ -195,16 +198,18 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
                   <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-3">You Might Also Like</h3>
                   <div className="grid grid-cols-3 gap-2">
                     {relatedProducts.map((relatedProduct) => (
-                      <Card 
+                      <Card
                         key={relatedProduct.id}
                         className="cursor-pointer hover:shadow-lg transition-all overflow-hidden group border-2 border-transparent hover:border-teal-300 dark:hover:border-teal-700"
                         onClick={() => onProductSelect(relatedProduct)}
                       >
                         <div className="aspect-square relative bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-slate-700 dark:to-slate-600">
-                          <img
+                          <Image
                             src={relatedProduct.image}
                             alt={relatedProduct.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                            fill
+                            sizes="33vw"
+                            className="object-cover group-hover:scale-110 transition-transform duration-300"
                           />
                         </div>
                         <div className="p-1.5">
