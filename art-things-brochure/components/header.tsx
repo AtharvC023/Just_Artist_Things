@@ -36,9 +36,7 @@ export default function Header() {
   }, [])
 
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Contact", href: "#contact" }
+    { name: "Home", href: "#home" }
   ]
 
   const userMenuItems = user ? [
@@ -87,7 +85,7 @@ export default function Header() {
           <span className="text-2xl font-serif font-bold tracking-tight text-foreground">Just Artist Things</span>
         </div>
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navItems.map((item) => (
             <a
               key={item.name}
@@ -99,12 +97,20 @@ export default function Header() {
             </a>
           ))}
           {user && (
-            <button
-              onClick={() => router.push('/orders')}
-              className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
-            >
-              Orders
-            </button>
+            <>
+              <button
+                onClick={() => router.push('/favorites')}
+                className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
+              >
+                Favorites
+              </button>
+              <button
+                onClick={() => router.push('/orders')}
+                className="text-sm font-medium text-foreground hover:text-foreground/60 transition-colors cursor-pointer"
+              >
+                Orders
+              </button>
+            </>
           )}
           {isAdmin && (
             <button
@@ -213,12 +219,20 @@ export default function Header() {
               </a>
             ))}
             {user && (
-              <button
-                onClick={() => router.push('/orders')}
-                className="text-sm font-medium text-foreground cursor-pointer text-left"
-              >
-                Orders
-              </button>
+              <>
+                <button
+                  onClick={() => router.push('/favorites')}
+                  className="text-sm font-medium text-foreground cursor-pointer text-left"
+                >
+                  Favorites
+                </button>
+                <button
+                  onClick={() => router.push('/orders')}
+                  className="text-sm font-medium text-foreground cursor-pointer text-left"
+                >
+                  Orders
+                </button>
+              </>
             )}
             {isAdmin && (
               <button
