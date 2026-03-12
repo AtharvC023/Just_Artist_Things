@@ -51,11 +51,25 @@ export default function Header() {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault()
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      setMobileMenuOpen(false)
+    
+    // If not on landing page, navigate to landing page first
+    if (window.location.pathname !== '/landing') {
+      router.push('/landing')
+      // Wait for navigation then scroll
+      setTimeout(() => {
+        const element = document.querySelector(href)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 300)
+    } else {
+      // Already on landing page, just scroll
+      const element = document.querySelector(href)
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
     }
+    setMobileMenuOpen(false)
   }
 
   return (
