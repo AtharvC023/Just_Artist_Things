@@ -7,7 +7,7 @@ export interface AnalyticsData {
   totalRevenue: number;
   pendingOrders: number;
   completedOrders: number;
-  // Inventory Analytics
+  totalUsers: number;
   totalSoldItems: number;
   lowStockCount: number;
   outOfStockCount: number;
@@ -29,7 +29,6 @@ export interface AnalyticsData {
     products: number;
     revenue: number;
   }>;
-  // Inventory specific data
   lowStockProducts: Array<{
     id: string;
     name: string;
@@ -48,14 +47,12 @@ export interface AnalyticsData {
 export const analyticsService = {
   async getAnalyticsData(): Promise<AnalyticsData> {
     try {
-      // Get all products and orders
       const [products, orders, orderStats] = await Promise.all([
         productService.getAllProducts(),
         orderService.getAllOrders(),
         orderService.getOrderStats()
       ]);
 
-      // Calculate popular products
       const popularProducts = products
         .filter(p => p.soldCount && p.soldCount > 0)
         .map(p => ({
@@ -68,11 +65,16 @@ export const analyticsService = {
         .sort((a, b) => b.soldCount - a.soldCount)
         .slice(0, 5);
 
-      // Calculate revenue by month (last 6 months)
       const revenueByMonth = this.calculateRevenueByMonth(orders);
-
-      // Calculate category stats
       const categoryStats = this.calculateCategoryStats(products, orders);
+      
+      const totalSoldItems = products.reduce((sum, p) => sum + (p.soldCount || 0), 0);
+      const lowStockProducts = products.filter(p => (p.stock || 0) > 0 && (p.stock || 0) <= 10);
+      const outOfStockCount = products.filter(p => (p.stock || 0) === 0).length;
+      const totalStockValue = products.reduce((sum, p) => sum + ((p.stock || 0) * (p.price || 0)), 0);
+      const inventoryTurnover = this.calculateInventoryTurnover(products);
+      
+      const uniqueUsers = new Set(orders.map(o => o.userId)).size;
 
       return {
         totalProducts: products.length,
@@ -80,9 +82,22 @@ export const analyticsService = {
         totalRevenue: orderStats.totalRevenue,
         pendingOrders: orderStats.pendingOrders,
         completedOrders: orderStats.completedOrders,
+        totalUsers: uniqueUsers,
+        totalSoldItems,
+        lowStockCount: lowStockProducts.length,
+        outOfStockCount,
+        totalStockValue,
         popularProducts,
         revenueByMonth,
-        categoryStats
+        categoryStats,
+        lowStockProducts: lowStockProducts.map(p => ({
+          id: p.id,
+          name: p.name,
+          category: p.category,
+          stock: p.stock || 0,
+          price: p.price || 0
+        })),
+        inventoryTurnover
       };
     } catch (error) {
       console.error('Error fetching analytics data:', error);
