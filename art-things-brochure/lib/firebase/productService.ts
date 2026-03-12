@@ -82,5 +82,51 @@ export const productService = {
       .filter(p => p.soldCount && p.soldCount > 0)
       .sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0))
       .slice(0, limit);
+  },
+
+  // Enhanced inventory management methods
+  async getLowStockProducts(threshold: number = 5): Promise<Product[]> {
+    const products = await this.getAllProducts();
+    return products.filter(p => (p.stock || 0) <= threshold && (p.stock || 0) > 0);
+  },
+
+  async getOutOfStockProducts(): Promise<Product[]> {
+    const products = await this.getAllProducts();
+    return products.filter(p => (p.stock || 0) === 0);
+  },
+
+  async getInventoryStats(): Promise<{
+    totalProducts: number;
+    totalSoldItems: number;
+    lowStockCount: number;
+    outOfStockCount: number;
+    totalStockValue: number;
+  }> {
+    const products = await this.getAllProducts();
+    
+    return {
+      totalProducts: products.length,
+      totalSoldItems: products.reduce((sum, p) => sum + (p.soldCount || 0), 0),
+      lowStockCount: products.filter(p => (p.stock || 0) <= 5 && (p.stock || 0) > 0).length,
+      outOfStockCount: products.filter(p => (p.stock || 0) === 0).length,
+      totalStockValue: products.reduce((sum, p) => sum + ((p.stock || 0) * (p.price || 0)), 0)
+    };
+  },
+
+  async bulkUpdateStock(updates: { productId: string; newStock: number }[]): Promise<void> {
+    const promises = updates.map(update => 
+      updateDoc(doc(db, PRODUCTS_COLLECTION, update.productId), { stock: update.newStock })
+    );
+    await Promise.all(promises);
+  },
+
+  getStockStatus(stock: number): { status: 'available' | 'low' | 'out'; message: string; color: string } {
+    if (stock === 0) {
+      return { status: 'out', message: 'Out of stock', color: 'text-red-600' };
+    } else if (stock <= 5) {
+      return { status: 'low', message: `Low stock (${stock} left)`, color: 'text-orange-600' };
+    } else {
+      return { status: 'available', message: 'Available', color: 'text-green-600' };
+    }
   }
 };

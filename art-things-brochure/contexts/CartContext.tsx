@@ -90,7 +90,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (quantity > 0) {
         const hasStock = await productService.checkStock(item.productId, quantity);
         if (!hasStock) {
-          toast.error('Not enough stock available');
+          const product = await productService.getProductById(item.productId);
+          const availableStock = product?.stock || 0;
+          toast.error(`Only ${availableStock} items available in stock`);
           return;
         }
       }

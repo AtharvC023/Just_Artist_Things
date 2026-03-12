@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Search, Package, Heart, ShoppingCart } from "lucide-react"
 import { ProductCardSkeleton } from "@/components/loading-skeleton"
+import { StockStatus } from "@/components/stock-status"
 import { useFavorites } from "@/contexts/FavoritesContext"
 import { useAuth } from "@/contexts/AuthContext"
 import { useCart } from "@/contexts/CartContext"
@@ -17,6 +18,8 @@ interface Product {
   image: string
   description: string
   price?: number
+  stock?: number
+  soldCount?: number
 }
 
 interface ProductGridProps {
@@ -226,15 +229,10 @@ export default function ProductGrid({
                     {/* Price and Stock Info */}
                     <div className="mb-4">
                       {product.price && product.price > 0 && (
-                        <p className="text-xl font-bold text-primary mb-1">₹{product.price.toFixed(2)}</p>
+                        <p className="text-xl font-bold text-primary mb-2">₹{product.price.toFixed(2)}</p>
                       )}
                       {product.stock !== undefined && (
-                        <p className={`text-xs ${
-                          product.stock > 10 ? 'text-green-600' :
-                          product.stock > 0 ? 'text-orange-600' : 'text-red-600'
-                        }`}>
-                          {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                        </p>
+                        <StockStatus stock={product.stock} variant="detailed" className="mb-2" />
                       )}
                     </div>
                     

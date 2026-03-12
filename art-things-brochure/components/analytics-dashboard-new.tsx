@@ -96,7 +96,7 @@ export default function AnalyticsDashboard({ className = "" }: AnalyticsDashboar
     {
       title: "Low Stock Items",
       value: analytics.lowStockCount,
-      icon: Clock,
+      icon: AlertTriangle,
       color: "text-yellow-600",
       bgColor: "bg-yellow-100"
     },
@@ -305,82 +305,6 @@ export default function AnalyticsDashboard({ className = "" }: AnalyticsDashboar
           </Card>
         </motion.div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Popular Products */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Star className="h-5 w-5 text-yellow-600" />
-              <h3 className="text-lg font-semibold">Popular Products</h3>
-            </div>
-            <div className="space-y-4">
-              {analytics.popularProducts.length > 0 ? (
-                analytics.popularProducts.map((product, index) => (
-                  <div key={product.id} className="flex items-center justify-between p-3 bg-accent/50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center justify-center w-8 h-8 bg-primary/10 rounded-full">
-                        <span className="text-sm font-bold text-primary">#{index + 1}</span>
-                      </div>
-                      <div>
-                        <p className="font-medium">{product.name}</p>
-                        <p className="text-sm text-muted-foreground">{product.category}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">{product.soldCount} sold</p>
-                      <p className="text-sm text-muted-foreground">₹{product.revenue.toFixed(2)}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Award className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>No sales data yet</p>
-                </div>
-              )}
-            </div>
-          </Card>
-        </motion.div>
-
-        {/* Low Stock Alert */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <Card className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="h-5 w-5 text-orange-600" />
-              <h3 className="text-lg font-semibold">Low Stock Alert</h3>
-            </div>
-            <div className="space-y-4">
-              {analytics.lowStockProducts.length > 0 ? (
-                analytics.lowStockProducts.map((product) => (
-                  <div key={product.id} className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-800">
-                    <div>
-                      <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-muted-foreground">{product.category}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold text-orange-600">{product.stock} left</p>
-                      <p className="text-sm text-muted-foreground">₹{product.price.toFixed(2)}</p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <CheckCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>All products well stocked</p>
-                </div>
-              )}
-            </div>
-          </Card>
-        </motion.div>
-      </div>
 
       {/* Popular Products and Category Revenue */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -449,14 +373,16 @@ export default function AnalyticsDashboard({ className = "" }: AnalyticsDashboar
           </Card>
         </motion.div>
       </div>
+
+      {/* Enhanced Summary Stats */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.6, delay: 0.9 }}
       >
         <Card className="p-6">
-          <h3 className="text-lg font-semibold mb-4">Quick Stats</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <h3 className="text-lg font-semibold mb-4">Inventory & Sales Summary</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mx-auto mb-2">
                 <CheckCircle className="h-6 w-6 text-green-600" />
@@ -475,8 +401,15 @@ export default function AnalyticsDashboard({ className = "" }: AnalyticsDashboar
               <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2">
                 <Package className="h-6 w-6 text-blue-600" />
               </div>
-              <p className="text-2xl font-bold">{analytics.categoryStats.length}</p>
-              <p className="text-sm text-muted-foreground">Categories</p>
+              <p className="text-2xl font-bold">{analytics.totalSoldItems}</p>
+              <p className="text-sm text-muted-foreground">Items Sold</p>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-full mx-auto mb-2">
+                <AlertTriangle className="h-6 w-6 text-yellow-600" />
+              </div>
+              <p className="text-2xl font-bold">{analytics.lowStockCount}</p>
+              <p className="text-sm text-muted-foreground">Low Stock Items</p>
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-full mx-auto mb-2">
@@ -486,6 +419,13 @@ export default function AnalyticsDashboard({ className = "" }: AnalyticsDashboar
                 ₹{analytics.totalOrders > 0 ? (analytics.totalRevenue / analytics.totalOrders).toFixed(0) : '0'}
               </p>
               <p className="text-sm text-muted-foreground">Avg Order Value</p>
+            </div>
+            <div className="text-center">
+              <div className="flex items-center justify-center w-12 h-12 bg-red-100 rounded-full mx-auto mb-2">
+                <Package className="h-6 w-6 text-red-600" />
+              </div>
+              <p className="text-2xl font-bold">{analytics.outOfStockCount}</p>
+              <p className="text-sm text-muted-foreground">Out of Stock</p>
             </div>
           </div>
         </Card>

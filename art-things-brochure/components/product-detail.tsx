@@ -8,6 +8,7 @@ import { useEffect } from "react"
 import { useCart } from "@/contexts/CartContext"
 import { useFavorites } from "@/contexts/FavoritesContext"
 import { useAuth } from "@/contexts/AuthContext"
+import { StockStatus } from "@/components/stock-status"
 
 const WHATSAPP_NUMBER = "919370015472"
 const INSTAGRAM_URL = "https://www.instagram.com/just__artist.things?igsh=MTVoa3FiM2I0YXBhZQ=="
@@ -19,6 +20,8 @@ interface Product {
   image: string
   description: string
   price?: number
+  stock?: number
+  soldCount?: number
 }
 
 interface ProductDetailProps {
@@ -40,6 +43,13 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
       alert('Please sign in to add items to cart')
       return
     }
+    
+    // Check if product is out of stock
+    if (product.stock !== undefined && product.stock <= 0) {
+      alert('This item is out of stock')
+      return
+    }
+    
     await addToCart(
       product.id,
       product.name,
@@ -127,9 +137,19 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 leading-tight">
                   {product.name}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-300 text-base leading-relaxed mb-4">
                   {product.description}
                 </p>
+                
+                {/* Price and Stock */}
+                <div className="mb-4">
+                  {product.price && product.price > 0 && (
+                    <p className="text-2xl font-bold text-primary mb-2">₹{product.price.toFixed(2)}</p>
+                  )}
+                  {product.stock !== undefined && (
+                    <StockStatus stock={product.stock} variant="detailed" />
+                  )}
+                </div>
               </div>
 
               {/* Action Buttons */}
@@ -138,10 +158,11 @@ export default function ProductDetail({ product, onClose, allProducts, onProduct
                   <div className="flex gap-2 mb-3">
                     <Button 
                       onClick={handleAddToCart}
-                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all" 
+                      disabled={product.stock !== undefined && product.stock <= 0}
+                      className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground h-12 text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed" 
                     >
                       <ShoppingCart className="mr-2 h-4 w-4" />
-                      Add to Cart
+                      {product.stock !== undefined && product.stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
                     </Button>
                     <Button
                       onClick={handleFavoriteToggle}

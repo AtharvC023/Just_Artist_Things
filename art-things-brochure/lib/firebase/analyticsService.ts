@@ -7,6 +7,11 @@ export interface AnalyticsData {
   totalRevenue: number;
   pendingOrders: number;
   completedOrders: number;
+  // Inventory Analytics
+  totalSoldItems: number;
+  lowStockCount: number;
+  outOfStockCount: number;
+  totalStockValue: number;
   popularProducts: Array<{
     id: string;
     name: string;
@@ -23,6 +28,20 @@ export interface AnalyticsData {
     category: string;
     products: number;
     revenue: number;
+  }>;
+  // Inventory specific data
+  lowStockProducts: Array<{
+    id: string;
+    name: string;
+    category: string;
+    stock: number;
+    price: number;
+  }>;
+  inventoryTurnover: Array<{
+    category: string;
+    turnoverRate: number;
+    totalSold: number;
+    averageStock: number;
   }>;
 }
 
@@ -133,5 +152,30 @@ export const analyticsService = {
       products: data.products,
       revenue: data.revenue
     }));
+  },
+
+  calculateInventoryTurnover(products: any[]): Array<{ category: string; turnoverRate: number; totalSold: number; averageStock: number }> {
+    const categoryData: { [key: string]: { totalSold: number; totalStock: number; count: number } } = {};
+
+    products.forEach(product => {
+      if (!categoryData[product.category]) {
+        categoryData[product.category] = { totalSold: 0, totalStock: 0, count: 0 };
+      }
+      categoryData[product.category].totalSold += product.soldCount || 0;
+      categoryData[product.category].totalStock += product.stock || 0;
+      categoryData[product.category].count += 1;
+    });
+
+    return Object.entries(categoryData).map(([category, data]) => {
+      const averageStock = data.count > 0 ? data.totalStock / data.count : 0;
+      const turnoverRate = averageStock > 0 ? data.totalSold / averageStock : 0;
+      
+      return {
+        category,
+        turnoverRate: Math.round(turnoverRate * 100) / 100,
+        totalSold: data.totalSold,
+        averageStock: Math.round(averageStock * 100) / 100
+      };
+    }).sort((a, b) => b.turnoverRate - a.turnoverRate);
   }
 };

@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Plus, Edit, Trash2, ArrowLeft, Star, BarChart3, Package } from "lucide-react"
 import { useRouter } from "next/navigation"
-import AnalyticsDashboard from "@/components/analytics-dashboard"
+import AnalyticsDashboard from "@/components/analytics-dashboard-new"
 
 export default function AdminPage() {
   const router = useRouter()

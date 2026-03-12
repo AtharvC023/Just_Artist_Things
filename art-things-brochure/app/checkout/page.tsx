@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { ArrowLeft, CreditCard, Smartphone } from "lucide-react"
+import { ArrowLeft, CreditCard, Smartphone, AlertTriangle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -12,6 +12,8 @@ import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useCart } from "@/contexts/CartContext"
 import { useAuth } from "@/contexts/AuthContext"
+import { productService } from "@/lib/firebase/productService"
+import { StockStatus } from "@/components/stock-status"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { toast } from "sonner"
@@ -33,7 +35,10 @@ export default function CheckoutPage() {
 
   const [paymentMethod, setPaymentMethod] = useState("simulated")
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [stockInfo, setStockInfo] = useState<Record<string, number>>({})
+  const [stockValidation, setStockValidation] = useState({ isValid: true, issues: [] as string[] })
 
+  // User and cart validation effect
   useEffect(() => {
     if (!user) {
       router.push('/home')
@@ -44,6 +49,41 @@ export default function CheckoutPage() {
       return
     }
   }, [user, cart, router])
+  useEffect(() => {
+    const validateStock = async () => {
+      if (!cart?.items.length) return
+      
+      try {
+        const stockData: Record<string, number> = {}
+        const issues: string[] = []
+        
+        await Promise.all(
+          cart.items.map(async (item) => {
+            const product = await productService.getProductById(item.productId)
+            const currentStock = product?.stock || 0
+            stockData[item.productId] = currentStock
+            
+            if (currentStock === 0) {
+              issues.push(`${item.name} is out of stock`)
+            } else if (item.quantity > currentStock) {
+              issues.push(`${item.name}: Only ${currentStock} available, but ${item.quantity} in cart`)
+            }
+          })
+        )
+        
+        setStockInfo(stockData)
+        setStockValidation({
+          isValid: issues.length === 0,
+          issues
+        })
+      } catch (error) {
+        console.error('Error validating stock:', error)
+        toast.error('Failed to validate stock. Please try again.')
+      }
+    }
+
+    validateStock()
+  }, [cart?.items])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -71,6 +111,12 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate stock first
+    if (!stockValidation.isValid) {
+      toast.error('Please resolve stock issues before proceeding')
+      return
+    }
     
     if (!validateForm()) {
       toast.error("Please fill all required fields correctly")
@@ -115,6 +161,36 @@ export default function CheckoutPage() {
           <h1 className="text-4xl font-serif font-bold mb-8">Checkout</h1>
 
           <div className="grid lg:grid-cols-3 gap-8">
+            {/* Stock Issues Alert */}
+            {!stockValidation.isValid && (
+              <div className="lg:col-span-3 mb-6">
+                <Card className="p-4 border-red-200 bg-red-50">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="h-5 w-5 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold text-red-800 mb-2">Stock Issues Found</h3>
+                      <ul className="space-y-1">
+                        {stockValidation.issues.map((issue, index) => (
+                          <li key={index} className="text-sm text-red-700">• {issue}</li>
+                        ))}
+                      </ul>
+                      <p className="text-sm text-red-600 mt-2">
+                        Please return to your cart to fix these issues before proceeding.
+                      </p>
+                      <Button 
+                        onClick={() => router.push('/cart')} 
+                        variant="outline" 
+                        size="sm" 
+                        className="mt-3 border-red-300 text-red-700 hover:bg-red-100"
+                      >
+                        Go to Cart
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            )}
+
             {/* Checkout Form */}
             <div className="lg:col-span-2">
               <form onSubmit={handleSubmit}>
@@ -240,8 +316,13 @@ export default function CheckoutPage() {
                   </RadioGroup>
                 </Card>
 
-                <Button type="submit" size="lg" className="w-full">
-                  Continue to Payment
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full" 
+                  disabled={!stockValidation.isValid}
+                >
+                  {!stockValidation.isValid ? 'Fix Stock Issues First' : 'Continue to Payment'}
                 </Button>
               </form>
             </div>
@@ -252,19 +333,31 @@ export default function CheckoutPage() {
                 <h2 className="text-xl font-bold mb-4">Order Summary</h2>
                 
                 <div className="space-y-3 mb-4">
-                  {cart.items.map((item) => (
-                    <div key={item.id} className="flex gap-3">
+                  {cart.items.map((item) => {
+                    const currentStock = stockInfo[item.productId]
+                    const hasStockIssue = currentStock !== undefined && (currentStock === 0 || item.quantity > currentStock)
+                    
+                    return (
+                    <div key={item.id} className={`flex gap-3 ${hasStockIssue ? 'opacity-60' : ''}`}>
                       <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden flex-shrink-0">
                         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1">
                         <p className="font-medium text-sm">{item.name}</p>
                         <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                        {currentStock !== undefined && (
+                          <StockStatus stock={currentStock} variant="text" className="text-xs" />
+                        )}
                         <p className="text-sm font-bold">₹{(item.price * item.quantity).toFixed(2)}</p>
+                        {hasStockIssue && (
+                          <p className="text-xs text-red-600 mt-1">
+                            {currentStock === 0 ? 'Out of stock' : `Only ${currentStock} available`}
+                          </p>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
+                  )})
+                  }
 
                 <Separator className="my-4" />
 
