@@ -185,166 +185,164 @@ export default function AdminPage() {
               </Button>
             </div>
 
-        {showForm && (
-          <Card className="p-6 mb-8">
-            <h2 className="text-2xl font-semibold mb-4">{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">Product Name</label>
-                <Input
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Category</label>
-                <Input
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  placeholder="e.g., Frames, Decor, Accessories"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Image URL</label>
-                <Input
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="/image.jpg or full URL"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Description</label>
-                <Textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Price (₹)</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Stock Quantity</label>
-                  <Input
-                    type="number"
-                    min="0"
-                    value={formData.stock}
-                    onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="featured"
-                  checked={formData.featured}
-                  onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                  className="w-4 h-4"
-                />
-                <label htmlFor="featured" className="text-sm font-medium cursor-pointer">
-                  Featured in Carousel
-                </label>
-              </div>
-              <div className="flex gap-4">
-                <Button type="submit">{editingProduct ? 'Update' : 'Add'} Product</Button>
-                <Button type="button" variant="outline" onClick={() => { setShowForm(false); setEditingProduct(null) }}>
-                  Cancel
-                </Button>
-              </div>
-            </form>
-          </Card>
-        )}
-
-        {loading ? (
-          <div className="text-center py-20">Loading...</div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
-              <Card 
-                key={product.id} 
-                className={`overflow-hidden cursor-move hover:shadow-xl transition-all ${
-                  draggedProduct?.id === product.id ? 'opacity-50 scale-95' : ''
-                }`}
-                draggable
-                onDragStart={() => handleDragStart(product)}
-                onDragOver={handleDragOver}
-                onDrop={() => handleDrop(product)}
-              >
-                <div className="relative aspect-[5/4] bg-white">
-                  <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                  <button
-                    onClick={() => toggleFeatured(product)}
-                    className="absolute top-3 right-3 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
-                    title={product.featured ? "Remove from carousel" : "Add to carousel"}
-                  >
-                    <Star 
-                      size={20} 
-                      className={product.featured ? "fill-yellow-500 text-yellow-500" : "text-gray-400"} 
+            {showForm && (
+              <Card className="p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4">{editingProduct ? 'Edit Product' : 'Add New Product'}</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Product Name</label>
+                    <Input
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      required
                     />
-                  </button>
-                  {/* Stock Status Badge */}
-                  {product.stock !== undefined && (
-                    <div className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium ${
-                      product.stock > 10 ? 'bg-green-100 text-green-800' :
-                      product.stock > 0 ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {product.stock > 0 ? `${product.stock} left` : 'Out of stock'}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Category</label>
+                    <Input
+                      value={formData.category}
+                      onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                      placeholder="e.g., Frames, Decor, Accessories"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Image URL</label>
+                    <Input
+                      value={formData.image}
+                      onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                      placeholder="/image.jpg or full URL"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Description</label>
+                    <Textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      rows={3}
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Price (₹)</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={formData.price}
+                        onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+                        required
+                      />
                     </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs text-muted-foreground uppercase">{product.category}</p>
-                    {product.featured && (
-                      <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
-                        ⭐ Featured
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="font-semibold mb-2">{product.name}</h3>
-                  <p className="text-sm text-foreground/70 mb-3">{product.description}</p>
-                  
-                  {/* Price and Stock Info */}
-                  <div className="mb-4 space-y-1">
-                    {product.price && product.price > 0 && (
-                      <p className="text-lg font-bold text-primary">₹{product.price.toFixed(2)}</p>
-                    )}
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Stock: {product.stock || 0}</span>
-                      <span>Sold: {product.soldCount || 0}</span>
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Stock Quantity</label>
+                      <Input
+                        type="number"
+                        min="0"
+                        value={formData.stock}
+                        onChange={(e) => setFormData({ ...formData, stock: parseInt(e.target.value) || 0 })}
+                        required
+                      />
                     </div>
                   </div>
-                  
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEdit(product)}>
-                      <Edit size={16} className="mr-1" />
-                      Edit
-                    </Button>
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(product.id)}>
-                      <Trash2 size={16} className="mr-1" />
-                      Delete
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="featured"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                      className="w-4 h-4"
+                    />
+                    <label htmlFor="featured" className="text-sm font-medium cursor-pointer">
+                      Featured in Carousel
+                    </label>
+                  </div>
+                  <div className="flex gap-4">
+                    <Button type="submit">{editingProduct ? 'Update' : 'Add'} Product</Button>
+                    <Button type="button" variant="outline" onClick={() => { setShowForm(false); setEditingProduct(null) }}>
+                      Cancel
                     </Button>
                   </div>
-                </div>
+                </form>
               </Card>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+            )}
+
+            {loading ? (
+              <div className="text-center py-20">Loading...</div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {products.map((product) => (
+                  <Card 
+                    key={product.id} 
+                    className={`overflow-hidden cursor-move hover:shadow-xl transition-all ${
+                      draggedProduct?.id === product.id ? 'opacity-50 scale-95' : ''
+                    }`}
+                    draggable
+                    onDragStart={() => handleDragStart(product)}
+                    onDragOver={handleDragOver}
+                    onDrop={() => handleDrop(product)}
+                  >
+                    <div className="relative aspect-[5/4] bg-white">
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      <button
+                        onClick={() => toggleFeatured(product)}
+                        className="absolute top-3 right-3 p-2 rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                        title={product.featured ? "Remove from carousel" : "Add to carousel"}
+                      >
+                        <Star 
+                          size={20} 
+                          className={product.featured ? "fill-yellow-500 text-yellow-500" : "text-gray-400"} 
+                        />
+                      </button>
+                      {product.stock !== undefined && (
+                        <div className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium ${
+                          product.stock > 10 ? 'bg-green-100 text-green-800' :
+                          product.stock > 0 ? 'bg-orange-100 text-orange-800' : 'bg-red-100 text-red-800'
+                        }`}>
+                          {product.stock > 0 ? `${product.stock} left` : 'Out of stock'}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs text-muted-foreground uppercase">{product.category}</p>
+                        {product.featured && (
+                          <span className="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">
+                            ⭐ Featured
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-semibold mb-2">{product.name}</h3>
+                      <p className="text-sm text-foreground/70 mb-3">{product.description}</p>
+                      
+                      <div className="mb-4 space-y-1">
+                        {product.price && product.price > 0 && (
+                          <p className="text-lg font-bold text-primary">₹{product.price.toFixed(2)}</p>
+                        )}
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Stock: {product.stock || 0}</span>
+                          <span>Sold: {product.soldCount || 0}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <Button size="sm" variant="outline" onClick={() => handleEdit(product)}>
+                          <Edit size={16} className="mr-1" />
+                          Edit
+                        </Button>
+                        <Button size="sm" variant="destructive" onClick={() => handleDelete(product.id)}>
+                          <Trash2 size={16} className="mr-1" />
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
   )
 }
