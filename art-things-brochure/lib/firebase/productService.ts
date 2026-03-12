@@ -10,6 +10,8 @@ export interface Product {
   price?: number;
   featured?: boolean;
   order?: number;
+  stock?: number;
+  soldCount?: number;
 }
 
 const PRODUCTS_COLLECTION = 'products';
